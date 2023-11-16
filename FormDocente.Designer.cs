@@ -43,6 +43,7 @@
             this.button1.TabIndex = 9;
             this.button1.Text = "Buscar";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label3
             // 
@@ -80,7 +81,7 @@
             this.label1.TabIndex = 5;
             this.label1.Text = "Docente";
             // 
-            // Form4
+            // FormDocente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -90,7 +91,7 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "Form4";
+            this.Name = "FormDocente";
             this.Text = "Form4";
             this.ResumeLayout(false);
             this.PerformLayout();

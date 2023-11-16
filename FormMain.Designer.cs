@@ -2,6 +2,7 @@
 {
     partial class FormMain
     {
+
         /// <summary>
         /// Required designer variable.
         /// </summary>

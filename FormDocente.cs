@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,21 @@ namespace ProyectoFInalBD
         public FormDocente()
         {
             InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DBhandler handler = new DBhandler();
+            string query = "SELECT * FROM Usuario Where id_tipo = 3 AND id_usuario = @id";
+            Usuario docente = handler.searchUsuariobyId(this.textBox1.Text, query);
+            if (docente != null)
+            {
+                MessageBox.Show(docente.Nombre + docente.Apellido_pat);
+            }
+            else
+            {
+                MessageBox.Show("Docente no encontrado");
+            }
         }
     }
 }
