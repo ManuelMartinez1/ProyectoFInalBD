@@ -45,7 +45,7 @@ namespace ProyectoFInalBD
         {
             List<Asignacion> asignaciones;
           DBhandler dBhandler = new DBhandler();
-           asignaciones = dBhandler.setAsignacion();
+           asignaciones = dBhandler.getAsignacion();
            Asignaciones formAsign = new Asignaciones(asignaciones);
             formAsign.ShowDialog();
         }

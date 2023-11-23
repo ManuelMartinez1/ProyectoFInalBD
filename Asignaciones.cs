@@ -12,7 +12,6 @@ namespace ProyectoFInalBD
 {
     public partial class Asignaciones : Form
     {
-        List<Asignacion> lista;
 
         public Asignaciones(List<Asignacion> lista)
         {
