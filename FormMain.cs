@@ -40,5 +40,14 @@ namespace ProyectoFInalBD
                 formInvitado.ShowDialog();
             }
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            List<Asignacion> asignaciones;
+          DBhandler dBhandler = new DBhandler();
+           asignaciones = dBhandler.setAsignacion();
+           Asignaciones formAsign = new Asignaciones(asignaciones);
+            formAsign.ShowDialog();
+        }
     }
 }

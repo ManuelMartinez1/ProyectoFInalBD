@@ -23,9 +23,13 @@ namespace ProyectoFInalBD
             DBhandler handler = new DBhandler();
             string query = "SELECT * FROM Usuario WHERE id_tipo = 2 AND id_usuario = @id";
             Usuario administrativo = handler.searchUsuariobyId(this.textBox1.Text, query);
+            List<Cajon> cajones;
+
             if (administrativo != null)
             {
-                MessageBox.Show(administrativo.Nombre + administrativo.Apellido_pat);
+                cajones = handler.searchCajonesById(2);
+                FormPL formPL = new FormPL(cajones, administrativo);
+                formPL.ShowDialog();
             }
             else
             {

@@ -21,6 +21,7 @@ namespace ProyectoFInalBD
         {
             if (textBox1.Text != "" && textBox2.Text != "")
             {
+                List<Cajon> cajones = new List<Cajon>();
                 Random random = new Random();
                 string id = random.Next(8000, 10000).ToString();
                 DBhandler handler = new DBhandler();
@@ -33,6 +34,10 @@ namespace ProyectoFInalBD
                    "4"
                    );
                 handler.CreateUsuarioInvitado(invitado);
+                cajones = handler.searchCajonesById(4);
+                FormPL formPL = new FormPL(cajones, invitado);
+                formPL.ShowDialog();
+
             }
             else
             {

@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,14 +26,19 @@ namespace ProyectoFInalBD
             DBhandler handler = new DBhandler();
             string query = "SELECT * FROM Usuario WHERE id_tipo = 1 AND id_usuario = @id";
             Usuario alumno = handler.searchUsuariobyId(this.textBox1.Text, query);
+            List<Cajon> cajones = new List<Cajon>();
+
             if ( alumno != null )
             {
-                MessageBox.Show(alumno.Nombre + alumno.Apellido_pat);
+                cajones = handler.searchCajonesById(1);
+                FormPL formPL = new FormPL(cajones, alumno);
+                formPL.ShowDialog();
             }
             else
             {
                 MessageBox.Show("Alumno no encontrado");
             }
         }
+
     }
 }

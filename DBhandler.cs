@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -90,6 +91,138 @@ namespace ProyectoFInalBD
             }
         }
 
+      public List<Cajon> searchCajonesById(int id)
+        {
+            List<Cajon> cajones = new List<Cajon>();
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = "SELECT c.no_cajon, e.nombre FROM Cajon c INNER JOIN Edificio e ON c.id_edificio = e.id_edificio WHERE c.disponibilidad = 1 AND c.id_tipo IN (0, @idTipo);";
+
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@idTipo", id);
+
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Cajon cajon = new Cajon
+                                {
+                                    No_cajon = Convert.ToInt32(reader["no_cajon"]),
+                                    Id_edificio = Convert.ToString(reader["nombre"])
+                                };
+
+                                cajones.Add(cajon);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al conectar la base de datos: " + ex.Message);
+                }
+            connection.Close ();
+            }
+            return cajones;
+        }
+
+        public bool updateDisponibilidad(int no_cajon)
+        {
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = "UPDATE Cajon SET disponibilidad = 0 WHERE no_cajon = @noCajon";
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@noCajon", no_cajon);
+                        int rowsAffected = command.ExecuteNonQuery();
+                        return rowsAffected > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al conectar la base de datos" + ex.Message);
+                    return false;
+                }
+            }
+        }
+
+        public List<Asignacion> setAsignacion()
+        {
+            List<Asignacion> asignaciones = new List<Asignacion>();
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = "SELECT a.id_usuario, u.nombre AS nombre_usuario, e.nombre AS nombre_edificio, c.no_cajon " +
+                                   "FROM Asignacion a " +
+                                   "JOIN Usuario u ON a.id_usuario = u.id_usuario " +
+                                   "JOIN Cajon c ON a.id_cajon = c.no_cajon " +
+                                   "JOIN Edificio e ON c.id_edificio = e.id_edificio";
+
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Asignacion asignacion = new Asignacion
+                                {
+                                    Id_Usuario= Convert.ToInt32(reader["id_usuario"]),
+                                    NombreUsuario = Convert.ToString(reader["nombre_usuario"]),
+                                    Edificio = Convert.ToString(reader["nombre_edificio"]),
+                                    No_cajon = Convert.ToInt32(reader["no_cajon"])
+                                };
+
+                                asignaciones.Add(asignacion);
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Error al conectar la base de datos " + e.Message);
+                }
+            }
+
+            return asignaciones;
+        }
+
+        public void createAsignacion(int no_cajon, Usuario user)
+        {
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // Insertar una nueva asignación en la tabla "Asignacion"
+                    string query = "INSERT INTO Asignacion (id_usuario, id_cajon) VALUES (@idUsuario, @idCajon)";
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@idUsuario", user.Id_usuario); // Supongo el nombre de la propiedad en la clase Usuario
+                        command.Parameters.AddWithValue("@idCajon", no_cajon);
+                        command.ExecuteNonQuery();
+                        MessageBox.Show("Visita registrada");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al conectar la base de datos: " + ex.Message);
+                }
+            }
+        }
+
     }
 
     public class Usuario { 
@@ -109,6 +242,48 @@ namespace ProyectoFInalBD
             Apellido_mat = apellido_mat;
             Nivel_educacion = nivel_educacion;
             Tipo = tipo;
+        }
+    }
+
+    public class Cajon
+    {
+        public int No_cajon { get; set; }
+        public string Id_edificio { get; set; }
+        
+
+        public Cajon()
+        {
+            No_cajon = 0;
+            Id_edificio = "";
+        }
+
+        public Cajon(int  no_cajon, string id_edificio)
+        {
+            No_cajon = no_cajon;
+            Id_edificio = id_edificio;
+        }
+    }
+
+    public class Asignacion
+    {
+        public int Id_Usuario { get; set; }
+        public string NombreUsuario { get; set; }
+        public int No_cajon { get; set; }
+        public string Edificio { get; set; }
+
+        public Asignacion()
+        {
+            Id_Usuario = 0;
+            NombreUsuario = "";
+            No_cajon = 0;
+            Edificio = "";
+        }
+        public Asignacion(int id_usuario, string nombreUsuario, int noCajon, string edificio)
+        {
+            Id_Usuario =id_usuario;
+            NombreUsuario= nombreUsuario;
+            No_cajon= noCajon;
+            Edificio= edificio;
         }
     }
 

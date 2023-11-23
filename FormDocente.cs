@@ -23,9 +23,13 @@ namespace ProyectoFInalBD
             DBhandler handler = new DBhandler();
             string query = "SELECT * FROM Usuario Where id_tipo = 3 AND id_usuario = @id";
             Usuario docente = handler.searchUsuariobyId(this.textBox1.Text, query);
+            List<Cajon> cajones = new List<Cajon>();
+
             if (docente != null)
             {
-                MessageBox.Show(docente.Nombre + docente.Apellido_pat);
+                cajones = handler.searchCajonesById(3);
+                FormPL formPL = new FormPL(cajones, docente);
+                formPL.ShowDialog();                                                                                
             }
             else
             {
