@@ -16,7 +16,8 @@ namespace ProyectoFInalBD
         public DBhandler() {
            connectionString = "server=bsfysc9kuzrrz3wndpmp-mysql.services.clever-cloud.com;database=bsfysc9kuzrrz3wndpmp;user=ujfuoquld10oprhc;password=IteJazh6R6wpiYUja8mL;";
         }
-    
+        
+        // Busca un usuario en la base de datos por id y regresa un objeto tipo Usuario.
         public Usuario searchUsuariobyId(string source, string query)
         {
 
@@ -61,7 +62,7 @@ namespace ProyectoFInalBD
             return null;
         }
 
-
+        // Crea un nuevo registro para aquellos usuarios que son invitados.
         public void CreateUsuarioInvitado(Usuario usuario)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -91,6 +92,7 @@ namespace ProyectoFInalBD
             }
         }
 
+        // Busca los cajones disponibles con base al numero de id del tipo que pertenecen y regresa la lista de cajones.
       public List<Cajon> searchCajonesById(int id)
         {
             List<Cajon> cajones = new List<Cajon>();
@@ -131,6 +133,7 @@ namespace ProyectoFInalBD
             return cajones;
         }
 
+        // Actualiza la disponibilidad del cajon de disponible a ocupado.
         public bool updateDisponibilidad(int no_cajon)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -154,7 +157,8 @@ namespace ProyectoFInalBD
             }
         }
 
-        public List<Asignacion> setAsignacion()
+        // Busca todas los registros de asignacion y los regresa en una lista. 
+        public List<Asignacion> getAsignacion()
         {
             List<Asignacion> asignaciones = new List<Asignacion>();
 
@@ -198,6 +202,7 @@ namespace ProyectoFInalBD
             return asignaciones;
         }
 
+        // Crea una nueva asignacion de cajon para los usuarios.
         public void createAsignacion(int no_cajon, Usuario user)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))

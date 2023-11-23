@@ -19,6 +19,7 @@ namespace ProyectoFInalBD
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // si el invitado no introdujo ningun valor en las entradas lo hace pedirlas de nuevo.
             if (textBox1.Text != "" && textBox2.Text != "")
             {
                 List<Cajon> cajones = new List<Cajon>();
