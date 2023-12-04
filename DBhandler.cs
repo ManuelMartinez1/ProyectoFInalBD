@@ -228,6 +228,31 @@ namespace ProyectoFInalBD
             }
         }
 
+        public void DeleteAsignacionById(int id)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+
+                    string query = "DELETE FROM Asignacion WHERE id_usuario = @IdUsuario";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@IdUsuario", id);
+                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Asignación eliminada con éxito.");
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    // Manejar la excepción
+                    MessageBox.Show("Error al eliminar la asignación: " + ex.Message);
+                }
+            }
+        }
+
     }
 
     public class Usuario { 

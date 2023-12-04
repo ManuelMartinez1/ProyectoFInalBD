@@ -37,9 +37,14 @@ namespace ProyectoFInalBD
         private void Seleccionar_Click(object sender, EventArgs e)
         {
             DBhandler handler = new DBhandler();
+            
             int selectedNoCajon = Convert.ToInt32(comboBox1.SelectedItem);
             bool success = handler.updateDisponibilidad(selectedNoCajon);
             handler.createAsignacion(selectedNoCajon, user);
+            List<Asignacion> asignaciones;
+            asignaciones = handler.getAsignacion();
+            Asignaciones formAsign = new Asignaciones(asignaciones, user);
+            formAsign.ShowDialog();
         }
     }
 }
