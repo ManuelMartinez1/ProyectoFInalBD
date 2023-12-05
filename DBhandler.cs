@@ -157,6 +157,29 @@ namespace ProyectoFInalBD
             }
         }
 
+        public bool updateDisponibilidadFalse(int no_cajon)
+        {
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = "UPDATE Cajon SET disponibilidad = 1 WHERE no_cajon = @noCajon";
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@noCajon", no_cajon);
+                        int rowsAffected = command.ExecuteNonQuery();
+                        return rowsAffected > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al conectar la base de datos" + ex.Message);
+                    return false;
+                }
+            }
+        }
+
         // Busca todas los registros de asignacion y los regresa en una lista. 
         public List<Asignacion> getAsignacion()
         {
@@ -236,18 +259,38 @@ namespace ProyectoFInalBD
                 {
                     conn.Open();
 
-                    string query = "DELETE FROM Asignacion WHERE id_usuario = @IdUsuario";
+                    // First, retrieve the no_cajon value
+                    string selectQuery = "SELECT no_cajon FROM Asignacion WHERE id_usuario = @IdUsuario";
+                    int noCajon = 0; // Variable to store no_cajon
 
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    using (MySqlCommand selectCmd = new MySqlCommand(selectQuery, conn))
                     {
-                        cmd.Parameters.AddWithValue("@IdUsuario", id);
-                        cmd.ExecuteNonQuery();
-                        MessageBox.Show("Asignación eliminada con éxito.");
+                        selectCmd.Parameters.AddWithValue("@IdUsuario", id);
+                        using (MySqlDataReader reader = selectCmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                noCajon = reader.GetInt32(0); // Assuming no_cajon is an integer
+                            }
+                        }
                     }
+
+                    // Now delete the record
+                    string deleteQuery = "DELETE FROM Asignacion WHERE id_usuario = @IdUsuario";
+                    using (MySqlCommand deleteCmd = new MySqlCommand(deleteQuery, conn))
+                    {
+                        deleteCmd.Parameters.AddWithValue("@IdUsuario", id);
+                        deleteCmd.ExecuteNonQuery();
+                        MessageBox.Show("Asignación eliminada con éxito.");
+                        updateDisponibilidadFalse(noCajon);
+                    }
+
+                    // Use the noCajon variable as needed
+                    // For example: Console.WriteLine("The retrieved no_cajon value is: " + noCajon);
+
                 }
                 catch (MySqlException ex)
                 {
-                    // Manejar la excepción
                     MessageBox.Show("Error al eliminar la asignación: " + ex.Message);
                 }
             }
