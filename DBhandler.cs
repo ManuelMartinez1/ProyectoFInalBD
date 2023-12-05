@@ -141,7 +141,7 @@ namespace ProyectoFInalBD
                 try
                 {
                     connection.Open();
-                    string query = "UPDATE Cajon SET disponibilidad = 0 WHERE no_cajon = @noCajon";
+                    string query = "UPDATE Cajon SET disponibilidad = 0 WHERE No_cajon = @noCajon";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@noCajon", no_cajon);
@@ -164,7 +164,7 @@ namespace ProyectoFInalBD
                 try
                 {
                     connection.Open();
-                    string query = "UPDATE Cajon SET disponibilidad = 1 WHERE no_cajon = @noCajon";
+                    string query = "UPDATE Cajon SET disponibilidad = 1 WHERE No_cajon = @noCajon";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@noCajon", no_cajon);
@@ -260,7 +260,7 @@ namespace ProyectoFInalBD
                     conn.Open();
 
                     // First, retrieve the no_cajon value
-                    string selectQuery = "SELECT no_cajon FROM Asignacion WHERE id_usuario = @IdUsuario";
+                    string selectQuery = "SELECT id_cajon FROM Asignacion WHERE id_usuario = @IdUsuario";
                     int noCajon = 0; // Variable to store no_cajon
 
                     using (MySqlCommand selectCmd = new MySqlCommand(selectQuery, conn))
